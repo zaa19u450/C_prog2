@@ -1,0 +1,1 @@
+app.exe pos_12_in.txt title Avatar
