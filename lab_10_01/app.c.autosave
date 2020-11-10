@@ -52,7 +52,7 @@ int main(int argc, char **argv)
                        f = fopen(argv[2], "w");
                        if (f)
                        {
-                           printf("Too simple:\n");
+                           fprintf(f, "Too simple:\n");
                            task_print(f, data_delete);
                            task_list_print(f, head);
                            fclose(f);
