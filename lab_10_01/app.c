@@ -27,41 +27,37 @@ int main(int argc, char **argv)
         f = fopen(argv[1], "r");
         if (f)
         {
-           printf("reading..\n");
            head = task_list_read(f);
            fclose(f);
            if (head)
            {
-               printf("sorting..\n");
-               sort(head, my_comparator);
+               head = sort(head, my_comparator);
                node_t *elem = task_create_node(data_add.name, data_add.diff);
                if (elem)
                {
-                   printf("inserting..\n");
-                   insert_in_sorted(&head, elem, my_comparator);
-                   printf("nodes_to_delit..\n");
-                   nodes_to_delete = task_list_to_delete(head, &data_add, my_comparator);
+                   task_list_insert_sorted(&head, elem, my_comparator);
+                   nodes_to_delete = create_deletion_list(head);
+                   //
+                   for (int i = 0; nodes_to_delete[i]; i++)
+                       printf("%p\n", nodes_to_delete);
 
                    if (nodes_to_delete)
                    {
-                       printf("removing duplicates..\n");
                        remove_duplicates(&head, my_comparator);
-                       printf("poping..\n");
                        data_delete = pop_front(&head);
 
                        f = fopen(argv[2], "w");
                        if (f)
                        {
-                           printf("Too simple:\n");
-                           task_print(f, data_delete);
+                           fprintf(f, "Too simple:\n");
+                           fprintf(f, "%s\n", data_delete->name);
+                           fprintf(f, "%d\n", data_delete->diff);
                            task_list_print(f, head);
                            fclose(f);
                        }
                        else
                            rc = ERROPEN;
-
-                       printf("deliting..\n");
-                       free_task_list_d(nodes_to_delete);
+                       free_deletion_list(nodes_to_delete);
                    }
                    else
                        rc = ERRMEM;

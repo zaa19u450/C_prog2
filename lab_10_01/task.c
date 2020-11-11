@@ -1,29 +1,5 @@
 #include "task.h"
 
-node_t* task_create_node(char *name, int diff)
-{
-    node_t *node = NULL;
-    data_t *data_tmp = NULL;
-    node = malloc(sizeof(node_t));
-    if (node)
-    {
-        data_tmp = malloc(sizeof(data_t));
-        if (data_tmp)
-        {
-            data_tmp->name = name;
-            data_tmp->diff = diff;
-            node->data = data_tmp;
-            node->next = NULL;
-        }
-        else
-        {
-            free(node);
-            node = NULL;
-        }
-    }
-    return node;
-}
-
 int my_comparator(const void *x, const void *y)
 {
     data_t *data_x = (data_t *) x;
@@ -40,8 +16,48 @@ int my_comparator(const void *x, const void *y)
     return 0;
 }
 
-int task_read(FILE *f, node_t **node)
+node_t* task_create_node(char *name, int diff)
 {
+    char *name_tmp = NULL;
+    node_t *node = NULL;
+    data_t *data_tmp = NULL;
+
+    node = malloc(sizeof(node_t));
+    if (node)
+    {
+        data_tmp = malloc(sizeof(data_t));
+        if (data_tmp)
+        {
+            name_tmp = calloc(strlen(name) + 1, sizeof(char));
+            if (name_tmp)
+            {
+                strncpy(name_tmp, name, strlen(name) + 1);
+                data_tmp->name = name_tmp;
+                data_tmp->diff = diff;
+                node->data = data_tmp;
+                node->next = NULL;
+            }
+            else
+            {
+                free(data_tmp);
+                free(node);
+                node = NULL;
+            }
+        }
+        else
+        {
+            free(node);
+            node = NULL;
+        }
+    }
+    else
+        node = NULL;
+    return node;
+}
+
+node_t* task_read(FILE *f)
+{
+    node_t *node = NULL;
     int rc = OK;
 
     char *name = NULL;
@@ -51,18 +67,33 @@ int task_read(FILE *f, node_t **node)
 
     if ((rc = my_getdelim(&name, &len, '\n', f)) == OK)
     {
-        if ((fscanf(f, "%d", &diff) == 1) && (diff >= MINDIFF)
-                && ((fgetc(f) == '\n') || (feof(f))))
+        if ((fscanf(f, "%d", &diff) == 1) && ((fgetc(f) == '\n') || (feof(f))))
         {
-            *node = task_create_node(name, diff);
-            if (*node == NULL)
-                rc = ERRMEM;
+            node = task_create_node(name, diff);
         }
-        else
-            rc = ERRVALUE;
+        free(name);
     }
-    free(name);
+    return node;
+}
 
-    return rc;
+void task_print(FILE *f, node_t *node)
+{
+    fprintf(f, "%s\n", ((data_t *) (node->data))->name);
+    fprintf(f, "%d\n", ((data_t *) (node->data))->diff);
+}
+
+node_t* task_free(node_t *node)
+{
+    node_t *next = NULL;
+    if (node)
+    {
+        next = node->next;
+        node->next = NULL;
+
+        free(((data_t *) (node->data))->name);
+        free(node->data);
+        free(node);
+    }
+    return next;
 }
 

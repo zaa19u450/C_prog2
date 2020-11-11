@@ -19,4 +19,8 @@ Suite *front_back_split_suite(void);
 Suite* sorted_merge_suite(void);
 Suite* sort_suite(void);
 
+
+
+Suite* my_comparator_suite(void);
+
 #endif // CHECK_MAIN_H

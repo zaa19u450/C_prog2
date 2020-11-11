@@ -11,8 +11,10 @@ void front_back_split(node_t *head, node_t **back)
         cur = cur->next;
     }
     //mistake
-    if (amount == 0)
+    if (amount < 2)
+    {
         *back = NULL;
+    }
     else
     {
         cur = head;
@@ -106,27 +108,21 @@ node_t* sorted_merge(node_t **heada, node_t **headb,
     return head_final;
 }
 
+
 node_t* sort(node_t *head, int (*comparator)(const void *, const void *))
 {
-    //mistake
-    if (head == NULL)
-        return NULL;
-
-    //end splitting
-    if (head->next == NULL)
-        return head;
-
     node_t *back = NULL;
+    if ((head) && (head->next))
+    {
+        //split
+        front_back_split(head, &back);
 
-    //split
-    front_back_split(head, &back);
+        //sort halves
+        head = sort(head, comparator);
+        back = sort(back, comparator);
 
-    //sort halves
-    head = sort(head, comparator);
-    back = sort(back, comparator);
-
-    //join halves
-    head = sorted_merge(&head, &back, comparator);
+        //join halves
+        head = sorted_merge(&head, &back, comparator);
+    }
     return head;
-
 }
