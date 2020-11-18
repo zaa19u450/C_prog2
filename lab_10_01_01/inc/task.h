@@ -25,10 +25,10 @@ struct my_data
 
 int my_comparator(const void *x, const void *y);
 
-node_t* task_create_node(char *name, int diff);
-node_t* task_read(FILE *f);
+node_t *task_create_node(char *name, int diff);
+node_t *task_read(FILE *f);
 void task_print(FILE *f, node_t *node);
-node_t* task_free(node_t *node);
+node_t *task_free(node_t *node);
 
 
 #endif // TASK_H

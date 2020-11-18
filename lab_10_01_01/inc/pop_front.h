@@ -3,6 +3,6 @@
 
 #include "task.h"
 
-void* pop_front(node_t **head);
+void *pop_front(node_t **head);
 
 #endif // POP_FRONT_H
