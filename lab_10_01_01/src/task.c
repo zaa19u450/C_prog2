@@ -16,7 +16,7 @@ int my_comparator(const void *x, const void *y)
     return 0;
 }
 
-node_t* task_create_node(char *name, int diff)
+node_t *task_create_node(char *name, int diff)
 {
     char *name_tmp = NULL;
     node_t *node = NULL;
@@ -55,7 +55,7 @@ node_t* task_create_node(char *name, int diff)
     return node;
 }
 
-node_t* task_read(FILE *f)
+node_t *task_read(FILE *f)
 {
     node_t *node = NULL;
     int rc = OK;
@@ -82,7 +82,7 @@ void task_print(FILE *f, node_t *node)
     fprintf(f, "%d\n", ((data_t *) (node->data))->diff);
 }
 
-node_t* task_free(node_t *node)
+node_t *task_free(node_t *node)
 {
     node_t *next = NULL;
     if (node)

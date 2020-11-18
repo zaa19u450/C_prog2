@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     FILE *f = NULL;
     node_t *head = NULL;
 
-    data_t data_add = {NULL, 0};
+    data_t data_add = { NULL, 0 };
     data_t *data_delete = NULL;
     data_t **nodes_to_delete = NULL;
 
@@ -27,45 +27,45 @@ int main(int argc, char **argv)
         f = fopen(argv[1], "r");
         if (f)
         {
-           head = task_list_read(f);
-           fclose(f);
-           if (head)
-           {
-               head = sort(head, my_comparator);
-               node_t *elem = task_create_node(data_add.name, data_add.diff);
-               if (elem)
-               {
-                   task_list_insert_sorted(&head, elem, my_comparator);
-                   nodes_to_delete = create_deletion_list(head);
+            head = task_list_read(f);
+            fclose(f);
+            if (head)
+            {
+                head = sort(head, my_comparator);
+                node_t *elem = task_create_node(data_add.name, data_add.diff);
+                if (elem)
+                {
+                    task_list_insert_sorted(&head, elem, my_comparator);
+                    nodes_to_delete = create_deletion_list(head);
 
-                   if (nodes_to_delete)
-                   {
-                       remove_duplicates(&head, my_comparator);
+                    if (nodes_to_delete)
+                    {
+                        remove_duplicates(&head, my_comparator);
 
-                       data_delete = pop_front(&head);
+                        data_delete = pop_front(&head);
 
-                       f = fopen(argv[2], "w");
-                       if (f)
-                       {
-                           fprintf(f, "Too simple:\n");
-                           fprintf(f, "%s\n", data_delete->name);
-                           fprintf(f, "%d\n", data_delete->diff);
-                           task_list_print(f, head);
-                           fclose(f);
-                       }
-                       else
-                           rc = ERROPEN;
-                       free_deletion_list(nodes_to_delete, head);
-                       task_list_free(head);
-                   }
-                   else
-                       rc = ERRMEM;
-               }
-               else
-                   rc = ERRMEM;
-           }
-           else
-               rc = ERRVALUE;
+                        f = fopen(argv[2], "w");
+                        if (f)
+                        {
+                            fprintf(f, "Too simple:\n");
+                            fprintf(f, "%s\n", data_delete->name);
+                            fprintf(f, "%d\n", data_delete->diff);
+                            task_list_print(f, head);
+                            fclose(f);
+                        }
+                        else
+                            rc = ERROPEN;
+                        free_deletion_list(nodes_to_delete, head);
+                        task_list_free(head);
+                    }
+                    else
+                        rc = ERRMEM;
+                }
+                else
+                    rc = ERRMEM;
+            }
+            else
+                rc = ERRVALUE;
         }
         else
             rc = ERROPEN;

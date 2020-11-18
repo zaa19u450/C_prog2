@@ -1,10 +1,10 @@
 #include "pop_front.h"
 
-void* pop_front(node_t **head)
+void *pop_front(node_t **head)
 {
     void *data = NULL;
     node_t *new_head = NULL;
-    if (*head)
+    if ((head) && (*head))
     {
         data = (*head)->data;
         new_head = (*head)->next;
@@ -12,5 +12,7 @@ void* pop_front(node_t **head)
         free(*head);
         *head = new_head;
     }
+    else
+        printf("here\n");
     return data;
 }

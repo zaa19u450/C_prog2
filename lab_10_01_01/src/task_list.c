@@ -9,7 +9,7 @@ void task_list_free(node_t *head)
     }
 }
 
-node_t* task_list_read(FILE *f)
+node_t *task_list_read(FILE *f)
 {
     int rc = OK;
     node_t *node = NULL;
@@ -75,7 +75,7 @@ void task_list_insert_sorted(node_t **head, node_t *elem, int (*comparator)(cons
 
 }
 
-data_t** create_deletion_list(node_t *head)
+data_t **create_deletion_list(node_t *head)
 {
     //count total amount of elems
     int amount = 0;
