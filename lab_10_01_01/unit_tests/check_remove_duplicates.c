@@ -1,46 +1,19 @@
 #include "check_main.h"
 
+START_TEST(test_remove_duplicates_empty_ptr)
+{
+    node_t **head = NULL;
+
+    remove_duplicates(head, my_comparator);
+    ck_assert_ptr_null(head);
+}
+END_TEST
+
 START_TEST(test_remove_duplicates_empty_list)
 {
     node_t *head = NULL;
 
     remove_duplicates(&head, my_comparator);
-    ck_assert_ptr_null(head);
-}
-END_TEST
-
-START_TEST(test_remove_duplicates_unsorted_list)
-{
-    data_t data1 = {"Test1", 1};
-    data_t data2 = {"Test2", 2};
-    data_t data3 = {"Test2", 2};
-    data_t data4 = {"Test4", 0};
-
-    node_t *node4 = malloc(sizeof(node_t));
-    node4->data = &data4;
-    node4->next = NULL;
-    node_t *node3 = malloc(sizeof(node_t));
-    node3->data = &data3;
-    node3->next = node4;
-    node_t *node2 = malloc(sizeof(node_t));
-    node2->data = &data2;
-    node2->next = node3;
-    node_t *node1 = malloc(sizeof(node_t));
-    node1->data = &data1;
-    node1->next = node2;
-
-    node_t *head = node1;
-
-    remove_duplicates(&head, my_comparator);
-    ck_assert_ptr_nonnull(head);
-    ck_assert_int_eq(nodes_eq(head, node1), 1);
-    head = head->next;
-    ck_assert_int_eq(nodes_eq(head, node2), 1);
-    head = head->next;
-    ck_assert_int_eq(nodes_eq(head, node3), 1);
-    head = head->next;
-    ck_assert_int_eq(nodes_eq(head, node4), 1);
-    head = head->next;
     ck_assert_ptr_null(head);
 }
 END_TEST
@@ -195,7 +168,7 @@ Suite* remove_duplicates_suite(void)
 
     tc_neg = tcase_create("negatives");
     tcase_add_test(tc_neg, test_remove_duplicates_empty_list);
-    tcase_add_test(tc_neg, test_remove_duplicates_unsorted_list);
+    tcase_add_test(tc_neg, test_remove_duplicates_empty_ptr);
     suite_add_tcase(s, tc_neg);
 
     tc_pos = tcase_create("positives");

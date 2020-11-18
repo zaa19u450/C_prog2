@@ -1,5 +1,16 @@
 #include "check_main.h"
 
+START_TEST(test_pop_front_empty_ptr)
+{
+    node_t **head = NULL;
+    void *data = NULL;
+
+    data = pop_front(head);
+    ck_assert_ptr_null(head);
+    ck_assert_ptr_null(data);
+}
+END_TEST
+
 START_TEST(test_pop_front_empty_list)
 {
     node_t *head = NULL;
@@ -107,6 +118,7 @@ Suite* pop_front_suite(void)
     tc_neg = tcase_create("negatives");
     tcase_add_test(tc_neg, test_pop_front_empty_list);
     tcase_add_test(tc_neg, test_pop_front_1null_elem_list);
+    tcase_add_test(tc_neg, test_pop_front_empty_ptr);
     suite_add_tcase(s, tc_neg);
 
     tc_pos = tcase_create("positives");
