@@ -75,8 +75,6 @@ START_TEST(test_pop_front_usual_list)
 
     //first pop
     data_got = pop_front(&head);
-    //previous deleted
-    ck_assert_ptr_null(node1->next);
     //got correct new_head
     ck_assert_ptr_eq(head, node2);
     ck_assert_ptr_eq(head->next, node3);
@@ -86,8 +84,6 @@ START_TEST(test_pop_front_usual_list)
 
     //second pop
     data_got = pop_front(&head);
-    //previous deleted
-    ck_assert_ptr_null(node2->next);
     //got correct new_head
     ck_assert_ptr_eq(head, node3);
     ck_assert_ptr_eq(head->next, NULL);
@@ -97,8 +93,6 @@ START_TEST(test_pop_front_usual_list)
 
     //third pop
     data_got = pop_front(&head);
-    //previous deleted
-    ck_assert_ptr_null(node3->next);
     //got correct new_head
     ck_assert_ptr_null(head);
     //got correct data

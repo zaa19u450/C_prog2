@@ -254,21 +254,45 @@ Suite* task_list_insert_sorted_suite(void)
 START_TEST(test_create_deletion_list_usual)
 {
     node_t *node3 = task_create_node("Test3", 3);
-    node_t *node2 = task_create_node("Test2", 2);
-    node_t *node1 = task_create_node("Test1", 1);
+    if (node3)
+    {
+        node_t *node2 = task_create_node("Test2", 2);
+        if (node2)
+        {
+            node_t *node1 = task_create_node("Test1", 1);
+            if (node1)
+            {
 
-    node_t *head = node1;
-    insert(&head, node2, NULL);
-    insert(&head, node3, NULL);
+                node_t *head = node1;
+                insert(&head, node2, NULL);
+                insert(&head, node3, NULL);
 
-    data_t **list = create_deletion_list(head);
-
-    ck_assert_ptr_eq(list[0], node1->data);
-    ck_assert_ptr_eq(list[1], node2->data);
-    ck_assert_ptr_eq(list[2], node3->data);
-    ck_assert_ptr_null(list[3]);
-
-    free_deletion_list(list, head);
+                data_t **list = create_deletion_list(head);
+                if (list)
+                {
+                    ck_assert_ptr_eq(list[0], node1->data);
+                    ck_assert_ptr_eq(list[1], node2->data);
+                    ck_assert_ptr_eq(list[2], node3->data);
+                    ck_assert_ptr_null(list[3]);
+                    free_deletion_list(list, head);
+                    task_list_free(head);
+                }
+                else
+                {
+                   task_free(node3);
+                   task_free(node2);
+                   task_free(node1);
+                }
+            }
+            else
+            {
+               task_free(node3);
+               task_free(node2);
+            }
+        }
+        else
+            task_free(node3);
+    }
 }
 END_TEST
 
@@ -281,9 +305,12 @@ START_TEST(test_create_deletion_list_one_elem)
     node_t *head = &node1;
 
     data_t **list = create_deletion_list(head);
-
-    ck_assert_ptr_eq(list[0], node1.data);
-    ck_assert_ptr_null(list[1]);
+    if (list)
+    {
+        ck_assert_ptr_eq(list[0], node1.data);
+        ck_assert_ptr_null(list[1]);
+        free(list);
+    }
 }
 END_TEST
 
@@ -293,8 +320,11 @@ START_TEST(test_create_deletion_list_empty)
     node_t *head = NULL;
 
     data_t **list = create_deletion_list(head);
-
-    ck_assert_ptr_null(list[0]);
+    if (list)
+    {
+        ck_assert_ptr_null(list[0]);
+        free(list);
+    }
 }
 END_TEST
 

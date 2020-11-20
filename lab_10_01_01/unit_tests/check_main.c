@@ -21,7 +21,7 @@ int main(void)
     srunner_add_suite(sr, sorted_merge_suite());
     srunner_add_suite(sr, sort_suite());
 
-    //functions from task
+    // //functions from task
     srunner_add_suite(sr, my_comparator_suite());
     srunner_add_suite(sr, my_getdelim_suite());
     srunner_add_suite(sr, task_create_node_suite()); //also uses task_free()

@@ -12,7 +12,5 @@ void *pop_front(node_t **head)
         free(*head);
         *head = new_head;
     }
-    else
-        printf("here\n");
     return data;
 }

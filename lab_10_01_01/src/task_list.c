@@ -72,7 +72,6 @@ void task_list_insert_sorted(node_t **head, node_t *elem, int (*comparator)(cons
     while ((cur) && (comparator(cur->data, elem->data) <= 0))
         cur = cur->next;
     insert(head, elem, cur);
-
 }
 
 data_t **create_deletion_list(node_t *head)
@@ -92,10 +91,11 @@ data_t **create_deletion_list(node_t *head)
     if (to_delete)
     {
         cur = head;
-        for (int i = 0; i < amount; i++, cur = cur->next)
-        {
-            to_delete[i] = cur->data;
-        }
+        if (head)
+            for (int i = 0; i < amount; i++, cur = cur->next)
+            {
+                to_delete[i] = cur->data;
+            }
         to_delete[amount] = NULL;
     }
     else
@@ -108,7 +108,7 @@ data_t **create_deletion_list(node_t *head)
 void free_deletion_list(data_t **list, node_t *head)
 {
     int flag;
-    for(int i = 0; list[i]; i++)
+    for (int i = 0; list[i]; i++)
     {
         flag = 0;
         for (node_t *cur = head; cur; cur = cur->next)
