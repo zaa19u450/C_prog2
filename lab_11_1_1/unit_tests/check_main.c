@@ -17,17 +17,15 @@ int main(void)
     int no_failed = 0;
     SRunner *sr;
 
-    //node
     sr = srunner_create(nosp_suite());
-
     srunner_add_suite(sr, s_suite());
+    srunner_add_suite(sr, lld_suite());
+    srunner_add_suite(sr, ho_suite());
+    srunner_add_suite(sr, combo_suite());
 
     srunner_run_all(sr, CK_VERBOSE);
-
     no_failed = srunner_ntests_failed(sr);
-
     srunner_free(sr);
-
 
     return (no_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

@@ -1,16 +1,21 @@
 #include "my_snprintf.h"
 #include <stdarg.h>
+#include <stdio.h>
 
 //s, lld, ho
 int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
 {
-    //int rc = 0;
     size_t cur_n = 0;
+
+    char *s_param = NULL;
+    int64_t lld_param;
+    uint16_t ho_param;
+
     va_list vl;
     va_start(vl, format);
 
     //start
-    for ( ; *format; format++)
+    for (; *format; format++)
     {
         //no specificator
         if (*format != '%')
@@ -25,9 +30,7 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
             //specificator %s
             if (*(format + 1) == 's')
             {
-                char *s_param = va_arg(vl, char *);
-
-                for (; *s_param; s_param++, cur_n++)
+                for (s_param = va_arg(vl, char *); *s_param; s_param++, cur_n++)
                     if (s && n && cur_n < n)
                         s[cur_n] = *s_param;
 
@@ -37,7 +40,7 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
             //specificator lld
             else if (*(format + 1) == 'l' && *(format + 2) == 'l' && *(format + 3) == 'd')
             {
-                int64_t lld_param = va_arg(vl, int64_t);
+                lld_param = va_arg(vl, int64_t);
 
                 //write sign
                 if (lld_param < 0)
@@ -47,6 +50,7 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
                     lld_param *= -1;
                     cur_n++;
                 }
+
                 int zeroes;
                 uint64_t lld_param_rev = reverse(lld_param, &zeroes);
 
@@ -79,7 +83,7 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
             else if (*(format + 1) == 'h' && *(format + 2) == 'o')
             {
                 //int because of warning
-                uint16_t ho_param = va_arg(vl, int);
+                ho_param = va_arg(vl, int);
                 uint32_t ho_result = from10_to8(ho_param);
                 int zeroes;
                 ho_result = reverse(ho_result, &zeroes);
@@ -109,10 +113,12 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
                 format += 2;
                 continue;
             }
+            //unknown specificator
             else
             {
-                va_end(vl);
-                return ERRUNKNOWN;
+                if (s && n && cur_n < n)
+                    s[cur_n] = '%';
+                cur_n++;
             }
         }
     }
@@ -132,8 +138,7 @@ int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...)
 int my_pow(int x, int n)
 {
     int result = 1;
-    for (int i = 0; i < n; i++, result *= x)
-        ;
+    for (int i = 0; i < n; i++, result *= x);
     return result;
 }
 
@@ -147,8 +152,8 @@ uint32_t from10_to8(uint16_t x)
     {
         cur = x % 8;
         cur_i++;
-        x = x / 8;
         result += cur * my_pow(10, cur_i);
+        x = x / 8;
     }
 
     return result;

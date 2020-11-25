@@ -1,9 +1,8 @@
 #ifndef MY_SNPRINTF_H
 #define MY_SNPRINTF_H
 
-#define ERRUNKNOWN -1
-
 #include <stdint.h>
+#include <stddef.h>
 
 int my_snprintf(char *restrict s, size_t n, const char *restrict format, ...);
 
