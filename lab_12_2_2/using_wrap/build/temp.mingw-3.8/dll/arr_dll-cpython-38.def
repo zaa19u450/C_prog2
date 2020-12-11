@@ -1,0 +1,3 @@
+LIBRARY arr_dll-cpython-38.dll
+EXPORTS
+PyInit_arr_dll

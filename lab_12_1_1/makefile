@@ -1,6 +1,5 @@
 CC := gcc
-#CFLAGS := -std=c99 -Wall -Werror -Wextra -Wfloat-equal -pedantic -Wfloat-conversion -Wvla -Wno-cast-function-type
-CFLAGS := -std=c99 -Wall -Werror -Wextra -Wfloat-equal -Wfloat-conversion -Wvla -pedantic
+CFLAGS := -std=c99 -Wall -Werror -Wfloat-equal -pedantic -Wfloat-conversion -Wvla
 INCPATH := ../inc/
 OUTPATH := ./out/
 SRCPATH := ./src/
